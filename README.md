@@ -1,1 +1,1 @@
-Practicing different machine learning algorithms with using real world examples.
+Practicing different machine learning algorithms
