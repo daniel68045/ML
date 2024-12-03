@@ -1,10 +1,7 @@
 import requests
 from flask import Flask, request, redirect
 
-
-# MUSIC RECOMMENDATION BOT
-# Script that takes a Spotify account and artist data and recommends the user 5 artists based on their top artist
-# genres Spotify credentials
+# Spotify credentials
 CLIENT_ID = "afe2675f96b2402283f7add8737844eb"
 CLIENT_SECRET = "a2c45d6b356d42e19487fdba14c42a6d"
 REDIRECT_URI = "http://localhost:8888/callback"
@@ -42,11 +39,13 @@ def callback():
     )
     token_data = token_response.json()
     access_token = token_data.get("access_token")
-    return "Authentication successful! You can now fetch your top artists."
+
+    # Redirect to the recommendation endpoint
+    return redirect("/recommend")
 
 
-@app.route("/test")
-def test():
+@app.route("/recommend")
+def recommend():
     if not access_token:
         return "Error: No access token. Please log in first."
 
@@ -62,69 +61,50 @@ def test():
     if not top_artists:
         return "No top artists found."
 
-    recommendations = set()  # Use a set to avoid duplicates
+    # Extract genres from top artists
     user_genres = set()
-
-    # Collect genres from user's top artists
     for artist in top_artists:
         user_genres.update(artist.get("genres", []))
 
-    # Fetch related artists for each top artist
-    for artist in top_artists:
-        artist_id = artist["id"]
-        artist_name = artist["name"]
+    # Fetch user's saved tracks and albums to identify frequently listened artists
+    saved_artists = set()
 
-        # Fetch related artists
-        related_response = requests.get(f"{SPOTIFY_API_URL}/artists/{artist_id}/related-artists", headers=headers)
-        if related_response.status_code == 200:
-            related_artists = related_response.json().get("artists", [])
-            if related_artists:
-                print(
-                    f'Related artists for {artist_name}:'
-                    f'{[related_artist["name"] for related_artist in related_artists]}')
-                for related_artist in related_artists:
-                    related_genres = set(related_artist.get("genres", []))
-                    if related_genres & user_genres:  # Check for genre overlap
-                        recommendations.add(related_artist["name"])
-            else:
-                print(f"No related artists found for {artist_name}.")
+    # Fetch saved tracks
+    track_response = requests.get(f"{SPOTIFY_API_URL}/me/tracks?limit=50", headers=headers)
+    if track_response.status_code == 200:
+        for item in track_response.json().get("items", []):
+            saved_artists.add(item["track"]["artists"][0]["name"])
+
+    # Fetch saved albums
+    album_response = requests.get(f"{SPOTIFY_API_URL}/me/albums?limit=50", headers=headers)
+    if album_response.status_code == 200:
+        for item in album_response.json().get("items", []):
+            saved_artists.add(item["album"]["artists"][0]["name"])
+
+    # Use genres to search for related artists
+    recommendations = []
+    for genre in user_genres:
+        search_response = requests.get(
+            f"{SPOTIFY_API_URL}/search",
+            headers=headers,
+            params={"q": f"genre:{genre}", "type": "artist", "limit": 5}
+        )
+        if search_response.status_code == 200:
+            search_results = search_response.json().get("artists", {}).get("items", [])
+            for artist in search_results:
+                # Filter out artists already in the user's saved library
+                if artist["name"] not in saved_artists and artist.get("popularity", 0) > 50:
+                    recommendations.append(artist["name"])
         else:
-            print(f"Failed to fetch related artists for {artist_name}: {related_response.json()}")
+            print(f"Error searching for genre '{genre}': {search_response.json()}")
 
     # Fallback to top artists if no recommendations found
     if not recommendations:
-        recommendations = {artist["name"] for artist in top_artists[:5]}  # Top 5 artists
-        return f"No related artists found. Recommending your top artists: {', '.join(recommendations)}"
+        recommendations = [artist["name"] for artist in top_artists[:5]]
 
-    return f"Recommended artists based on your favorite genres: {', '.join(recommendations)}"
-
-
-@app.route("/manual-test")
-def manual_test():
-    if not access_token:
-        return "Error: No access token. Please log in first."
-
-    # Headers for the API call
-    headers = {"Authorization": f"Bearer {access_token}"}
-
-    # Hardcoded artist ID for Drake
-    artist_id = "06HL4z0CvFAxyc27GXpf02"  # Replace with another ID if needed
-    artist_name = "Taylor Swift"
-
-    # Fetch related artists for the hardcoded artist
-    related_response = requests.get(f"{SPOTIFY_API_URL}/artists/{artist_id}/related-artists", headers=headers)
-    if related_response.status_code == 200:
-        related_artists = related_response.json().get("artists", [])
-        if related_artists:
-            related_artist_names = [artist["name"] for artist in related_artists]
-            print(f"Related artists for {artist_name}: {related_artist_names}")
-            return f"Related artists for {artist_name}: {', '.join(related_artist_names)}"
-        else:
-            print(f"No related artists found for {artist_name}.")
-            return f"No related artists found for {artist_name}."
-    else:
-        print(f"Error fetching related artists for {artist_name}: {related_response.json()}")
-        return f"Error fetching related artists for {artist_name}: {related_response.json()}"
+    # Remove duplicates and return the recommendations
+    recommendations = list(set(recommendations))
+    return f"Recommended artists: {', '.join(recommendations)}"
 
 
 if __name__ == "__main__":
