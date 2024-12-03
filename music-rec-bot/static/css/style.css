@@ -1,26 +1,27 @@
 /* Global Styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Lucida Console", "Courier New", monospace;
   text-align: center;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f9;
+  background-color: #121212;
+  color: #fff;
 }
 
 /* Container Styles */
 .container {
   margin: 50px auto;
   max-width: 600px;
-  background: white;
+  background: #181818;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 /* Heading Styles */
 h1 {
-  color: #333;
-  font-size: 2rem;
+  color: #1db954;
+  font-size: 2.5rem;
   margin-bottom: 20px;
 }
 
@@ -29,30 +30,37 @@ h1 {
   list-style: none;
   padding: 0;
   margin: 0;
+  text-align: left;
 }
 
 #artist-list li {
   margin: 10px 0;
   font-size: 1.2rem;
-  color: #444;
+  padding: 10px;
+  background: #282828;
+  border-radius: 5px;
+  color: #fff;
 }
 
 /* Button Styles */
 .btn {
   display: inline-block;
   padding: 10px 20px;
-  background: #007bff;
-  color: white;
+  background: #1db954;
+  color: #fff;
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: 50px;
   margin-top: 20px;
   font-size: 1rem;
+  font-weight: bold;
+  font-family: "Lucida Console", "Courier New", monospace;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .btn:hover {
-  background: #0056b3;
+  background: #1aa34a;
+  transform: scale(1.05);
 }
 
 /* Loading Screen Styles */
@@ -62,16 +70,33 @@ h1 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
+  background: rgba(0, 0, 0, 0.9);
+  color: #1db954;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: 2rem;
   z-index: 1000;
+  font-weight: bold;
 }
 
 /* Utility Classes */
 .hidden {
-  display: none !important; /* Force screen to become hidden - justified as it only needs to appear once in script */
+  display: none !important;
+}
+
+/* Adjustments for Smaller Screens */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+
+  #artist-list li {
+    font-size: 1rem;
+  }
 }
