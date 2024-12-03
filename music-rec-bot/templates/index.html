@@ -4,16 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Music Recommendation Bot</title>
-    <link rel="stylesheet" href="/static/css/styles.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
   </head>
   <body>
     <div class="container">
-      <h1>Welcome to the Music Recommendation Bot</h1>
+      <h1>Spotify Music Recommendation</h1>
       <p>
-        Click below to authorize Spotify and get personalized music
+        Click below to login to your Spotify account and get personalized music
         recommendations!
       </p>
-      <a href="/login" class="btn">Authorize Spotify</a>
+      <button id="authorize-btn" class="btn">Spotify Login</button>
     </div>
+    <div id="loading-screen" class="hidden">
+      <p>Loading...</p>
+    </div>
+    <script src="/static/js/script.js"></script>
   </body>
 </html>

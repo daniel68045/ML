@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect
 import os
 from dotenv import load_dotenv
 
-# MUSIC RECOMMENDATION
+# SPOTIFY USER MUSIC RECOMMENDATION
 # A script that takes user data (top artists, albums, listening history) and suggests artists
 # using Spotify /search API to find similar artists less frequently found in the users library.
 
@@ -131,4 +131,3 @@ def recommend():
 if __name__ == "__main__":
     # Run the Flask app on port 8888
     app.run(port=8888)
-
