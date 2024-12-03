@@ -1,9 +1,15 @@
 import requests
+import os
+from dotenv import load_dotenv
 
-# Generates a new access token
-# Spotify client ID and client secret
-CLIENT_ID = "MY_CLIENT_ID"
-CLIENT_SECRET = "MY_CLIENT_SECRET"
+# This script generates a new access token from Spotify
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Spotify client ID and client secret from .evn
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
 # Spotify API token endpoint
 url = "https://accounts.spotify.com/api/token"

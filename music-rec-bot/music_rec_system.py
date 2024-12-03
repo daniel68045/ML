@@ -1,12 +1,18 @@
 import requests
 from flask import Flask, render_template, request, redirect
+import os
+from dotenv import load_dotenv
 
-import requests
-from flask import Flask, request, redirect, render_template
+# MUSIC RECOMMENDATION
+# A script that takes user data (top artists, albums, listening history) and suggests artists
+# using Spotify /search API to find similar artists less frequently found in the users library.
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Spotify credentials for API access
-CLIENT_ID = "afe2675f96b2402283f7add8737844eb"  # My Client ID
-CLIENT_SECRET = "a2c45d6b356d42e19487fdba14c42a6d"  # My Client Secret
+CLIENT_ID = os.getenv("CLIENT_ID") # My ClIENT_ID from .evn
+CLIENT_SECRET = os.getenv("CLIENT_SECRET") # My ClIENT_SECRET from .env
 REDIRECT_URI = "http://localhost:8888/callback"  # URL where Spotify redirects after login
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"  # Spotify Authorization URL
 SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"  # Spotify Token URL
