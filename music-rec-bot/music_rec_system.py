@@ -1,32 +1,45 @@
 import requests
 from flask import Flask, render_template, request, redirect
 
-# Spotify credentials
-CLIENT_ID = "afe2675f96b2402283f7add8737844eb"
-CLIENT_SECRET = "a2c45d6b356d42e19487fdba14c42a6d"
-REDIRECT_URI = "http://localhost:8888/callback"
-SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
-SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
-SPOTIFY_API_URL = "https://api.spotify.com/v1"
-SCOPE = "user-top-read"
+import requests
+from flask import Flask, request, redirect, render_template
 
+# Spotify credentials for API access
+CLIENT_ID = "afe2675f96b2402283f7add8737844eb"  # My Client ID
+CLIENT_SECRET = "a2c45d6b356d42e19487fdba14c42a6d"  # My Client Secret
+REDIRECT_URI = "http://localhost:8888/callback"  # URL where Spotify redirects after login
+SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"  # Spotify Authorization URL
+SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"  # Spotify Token URL
+SPOTIFY_API_URL = "https://api.spotify.com/v1"  # Base URL for Spotify Web API
+SCOPE = "user-top-read"  # Scope for accessing user's top artists
+
+# Flask app setup
 app = Flask(__name__)
-access_token = None  # Global variable for access token
+access_token = None  # Global variable to store the Spotify access token
 
 
 @app.route("/")
 def index():
+    """Render the homepage where the user can start the login process."""
     return render_template("index.html")
+
 
 @app.route("/login")
 def login():
+    """Redirect the user to Spotify's login page for authentication."""
     auth_url = f"{SPOTIFY_AUTH_URL}?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPE}"
     return redirect(auth_url)
 
+
 @app.route("/callback")
 def callback():
+    """
+    Handle Spotify's callback after user login.
+    Exchange the authorization code for an access token.
+    """
     global access_token
-    code = request.args.get("code")
+    code = request.args.get("code")  # Get the authorization code from query parameters
+    # Request access token from Spotify
     token_response = requests.post(
         SPOTIFY_TOKEN_URL,
         data={
@@ -38,18 +51,23 @@ def callback():
         }
     )
     token_data = token_response.json()
-    access_token = token_data.get("access_token")
-    return redirect("/recommend")
+    access_token = token_data.get("access_token")  # Store the access token
+    return redirect("/recommend")  # Redirect to the recommendation page
+
 
 @app.route("/recommend")
 def recommend():
+    """
+    Generate artist recommendations based on the user's top genres and listening history.
+    """
     if not access_token:
+        # Redirect to homepage if the user isn't logged in
         return redirect("/")
 
-    # Headers for the API call
+    # Headers for making Spotify API requests
     headers = {"Authorization": f"Bearer {access_token}"}
 
-    # Fetch user's top artists
+    # Fetch user's top artists from Spotify
     response = requests.get(f"{SPOTIFY_API_URL}/me/top/artists", headers=headers)
     if response.status_code != 200:
         return "Error fetching top artists."
@@ -58,7 +76,7 @@ def recommend():
     if not top_artists:
         return "No top artists found."
 
-    # Extract genres from top artists
+    # Collect genres from the user's top artists
     user_genres = set()
     for artist in top_artists:
         user_genres.update(artist.get("genres", []))
@@ -66,13 +84,13 @@ def recommend():
     # Fetch user's saved tracks and albums to identify frequently listened artists
     saved_artists = set()
 
-    # Fetch saved tracks
+    # Fetch user's saved tracks
     track_response = requests.get(f"{SPOTIFY_API_URL}/me/tracks?limit=50", headers=headers)
     if track_response.status_code == 200:
         for item in track_response.json().get("items", []):
             saved_artists.add(item["track"]["artists"][0]["name"])
 
-    # Fetch saved albums
+    # Fetch user's saved albums
     album_response = requests.get(f"{SPOTIFY_API_URL}/me/albums?limit=50", headers=headers)
     if album_response.status_code == 200:
         for item in album_response.json().get("items", []):
@@ -89,13 +107,13 @@ def recommend():
         if search_response.status_code == 200:
             search_results = search_response.json().get("artists", {}).get("items", [])
             for artist in search_results:
-                # Filter out artists already in the user's saved library
+                # Filter out artists already in the user's library and prioritize popular artists
                 if artist["name"] not in saved_artists and artist.get("popularity", 0) > 50:
                     recommendations.append(artist["name"])
         else:
             print(f"Error searching for genre '{genre}': {search_response.json()}")
 
-    # Fallback to top artists if no recommendations found
+    # Fallback to user's top artists if no recommendations are found
     if not recommendations:
         recommendations = [artist["name"] for artist in top_artists[:5]]
 
@@ -105,4 +123,6 @@ def recommend():
 
 
 if __name__ == "__main__":
+    # Run the Flask app on port 8888
     app.run(port=8888)
+
