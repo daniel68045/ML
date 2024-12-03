@@ -2,6 +2,11 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+# MUSIC RECOMMENDATION PROTO
+# Originally a prototype/pratice for a script that would recommend a user similar music 
+# based on their given library
+# Switched from using the Last.fm API to the Spotify Web API 
+
 # Define a dummy dataset that acts as the Last.fm API
 data = pd.DataFrame({
     "Artist": ["Radiohead", "Coldplay", "Nirvana"],
