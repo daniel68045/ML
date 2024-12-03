@@ -19,13 +19,12 @@ similarity_matrix = cosine_similarity(tag_vectors)
 similarity_df = pd.DataFrame(similarity_matrix, index=data["Artist"], columns=data["Artist"])
 
 
-# Function that actually recommends
+# Function that actually recommends - sort similar artists by similarity score, exclude the artist itself
 def recommend_similar_music(artist_name, top_n=1):
     if artist_name not in similarity_df.index:
         print(f"Artist '{artist_name}' not found in the dataset.")
         return []
 
-    # Sort similar artists by similarity score, exclude the artist itself
     similar_artists = similarity_df.loc[artist_name].sort_values(ascending=False)[1:top_n + 1]
     return similar_artists
 

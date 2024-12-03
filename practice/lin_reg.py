@@ -20,4 +20,5 @@ model.fit(X, y)
 hours_studied = np.array([[6]])  # Predict for 6 hours of studying
 predicted_score = model.predict(hours_studied)
 
+# Print predicted score from model
 print(f"Predicted score for studying {hours_studied[0][0]} hours: {predicted_score[0]:.2f}")
