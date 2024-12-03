@@ -11,8 +11,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Spotify credentials for API access
-CLIENT_ID = os.getenv("CLIENT_ID") # My ClIENT_ID from .evn
-CLIENT_SECRET = os.getenv("CLIENT_SECRET") # My ClIENT_SECRET from .env
+CLIENT_ID = os.getenv("CLIENT_ID") # My ClIENT_ID
+CLIENT_SECRET = os.getenv("CLIENT_SECRET") # My ClIENT_SECRET
 REDIRECT_URI = "http://localhost:8888/callback"  # URL where Spotify redirects after login
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"  # Spotify Authorization URL
 SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"  # Spotify Token URL

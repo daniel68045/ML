@@ -6,12 +6,9 @@ Eventually, using Spotify's Web API to retrieve user data (top artists, genres, 
 
 ## To Run:
 
-## Setup
-
-1. Create a `.env` file in the root directory with the following:
+1. Clone into the repository with web URL:
    ```
-   CLIENT_ID=your-spotify-client-id
-   CLIENT_SECRET=your-spotify-client-secret
+   git clone https://github.com/daniel68045/Music-Rec.git
    ```
 2. Install dependencies:
    ```
