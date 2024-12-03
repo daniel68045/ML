@@ -1,10 +1,9 @@
 import requests
 
-
 # Generates a new access token
 # Spotify client ID and client secret
-CLIENT_ID = "afe2675f96b2402283f7add8737844eb"
-CLIENT_SECRET = "a2c45d6b356d42e19487fdba14c42a6d"
+CLIENT_ID = "MY_CLIENT_ID"
+CLIENT_SECRET = "MY_CLIENT_SECRET"
 
 # Spotify API token endpoint
 url = "https://accounts.spotify.com/api/token"

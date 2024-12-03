@@ -2,7 +2,6 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-
 # Define a dummy dataset that acts as the Last.fm API
 data = pd.DataFrame({
     "Artist": ["Radiohead", "Coldplay", "Nirvana"],

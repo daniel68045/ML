@@ -1,6 +1,5 @@
 import unittest
 
-
 # Beginner practice in python
 
 # Easy function that adds n + n and divides by 2

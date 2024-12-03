@@ -1,7 +1,6 @@
 from sklearn.linear_model import LinearRegression
 import numpy as np
 
-
 # LINEAR REGRESSION PRACTICE
 # A model that predicts a student's score based on the number of hours they study
 # Using the formula y = mx + b, the model calculates the best values for m and b, to predict

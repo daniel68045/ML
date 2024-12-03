@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, request, redirect
+from flask import Flask, render_template, request, redirect
 
 # Spotify credentials
 CLIENT_ID = "afe2675f96b2402283f7add8737844eb"
@@ -15,18 +15,18 @@ access_token = None  # Global variable for access token
 
 
 @app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/login")
 def login():
-    # Redirect user to Spotify login page
     auth_url = f"{SPOTIFY_AUTH_URL}?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPE}"
     return redirect(auth_url)
-
 
 @app.route("/callback")
 def callback():
     global access_token
     code = request.args.get("code")
-
-    # Exchange authorization code for access token
     token_response = requests.post(
         SPOTIFY_TOKEN_URL,
         data={
@@ -39,15 +39,12 @@ def callback():
     )
     token_data = token_response.json()
     access_token = token_data.get("access_token")
-
-    # Redirect to the recommendation endpoint
     return redirect("/recommend")
-
 
 @app.route("/recommend")
 def recommend():
     if not access_token:
-        return "Error: No access token. Please log in first."
+        return redirect("/")
 
     # Headers for the API call
     headers = {"Authorization": f"Bearer {access_token}"}
@@ -55,7 +52,7 @@ def recommend():
     # Fetch user's top artists
     response = requests.get(f"{SPOTIFY_API_URL}/me/top/artists", headers=headers)
     if response.status_code != 200:
-        return f"Error fetching top artists: {response.status_code}, {response.json()}"
+        return "Error fetching top artists."
 
     top_artists = response.json().get("items", [])
     if not top_artists:
@@ -104,7 +101,7 @@ def recommend():
 
     # Remove duplicates and return the recommendations
     recommendations = list(set(recommendations))
-    return f"Recommended artists: {', '.join(recommendations)}"
+    return render_template("recommended.html", recommendations=recommendations)
 
 
 if __name__ == "__main__":
