@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 import os
 from dotenv import load_dotenv
 
@@ -22,6 +22,7 @@ SCOPE = "user-top-read"  # Scope for accessing user's top artists
 # Flask app setup
 app = Flask(__name__)
 access_token = None  # Global variable to store the Spotify access token
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 
 @app.route("/")
@@ -32,8 +33,13 @@ def index():
 
 @app.route("/login")
 def login():
-    """Redirect the user to Spotify's login page for authentication."""
-    auth_url = f"{SPOTIFY_AUTH_URL}?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPE}"
+    """
+    Redirect the user to Spotify's login page with forced authentication.
+    """
+    auth_url = (
+        f"{SPOTIFY_AUTH_URL}?client_id={CLIENT_ID}"
+        f"&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPE}&show_dialog=true"
+    )
     return redirect(auth_url)
 
 
@@ -127,6 +133,13 @@ def recommend():
     recommendations = list(set(recommendations))
     return render_template("recommended.html", recommendations=recommendations)
 
+@app.route("/logout")
+def logout():
+    """
+    Clear the session and guide the user back to the app's homepage.
+    """
+    session.pop('access_token', None)
+    return redirect("/")
 
 if __name__ == "__main__":
     # Run the Flask app on port 8888
