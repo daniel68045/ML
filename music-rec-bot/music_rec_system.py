@@ -133,6 +133,7 @@ def recommend():
     recommendations = list(set(recommendations))
     return render_template("recommended.html", recommendations=recommendations)
 
+
 @app.route("/logout")
 def logout():
     """
@@ -140,6 +141,7 @@ def logout():
     """
     session.pop('access_token', None)
     return redirect("/")
+
 
 if __name__ == "__main__":
     # Run the Flask app on port 8888
