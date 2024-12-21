@@ -7,18 +7,16 @@ import numpy as np
 # scores based on the training data defined
 
 # Example data: Hours studied vs. Exam scores
-# Features (Hours studied)
-X = np.array([[1], [2], [3], [4], [5]])  # Each sublist represents one input
-# Labels (Scores achieved)
-y = np.array([50, 55, 65, 70, 75])  # Corresponding scores
+X = np.array([[1], [2], [3], [4], [5]])  
+y = np.array([50, 55, 65, 70, 75]) 
 
 # Create and train the model
 model = LinearRegression()
 model.fit(X, y)
 
 # Test the model with a new input
-hours_studied = np.array([[6]])  # Predict for 6 hours of studying
+hours_studied = np.array([[6]]) 
 predicted_score = model.predict(hours_studied)
 
-# Print predicted score from model
+# Print model prediction 
 print(f"Predicted score for studying {hours_studied[0][0]} hours: {predicted_score[0]:.2f}")
