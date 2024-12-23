@@ -20,9 +20,15 @@ A Flask web app that uses Spotify's Web API to retrieve user data (top artists, 
    ```
    CLIENT_ID=<your-spotify-client-id>
    CLIENT_SECRET=<your-spotify-client-secret>
-   SESSION_SECRET=<a-random-secret-key>    
+   SESSION_SECRET=<a-random-secret-key>
    ```
 4. Run the application:
    ```
    python3 music_rec_system.py
    ```
+
+## Pictures
+
+![Screenshot1](/Screenshot1.png)
+
+![Screenshot2](/Screenshot2.png)
