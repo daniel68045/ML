@@ -11,18 +11,24 @@ A Flask app that uses Spotify's Web API to retrieve user data (top artists, genr
 1. Clone into the repository with web URL:
    ```
    git clone https://github.com/daniel68045/Music-Rec.git
+    ```
+2. Create a new virtual enviroment (optional):
    ```
-2. Install dependencies:
+   python3 -m venv .venv
+   source .venv/bin/activate #MacOS
+   source .venv/Scripts/activate #Windows
+   ```
+3. Install dependencies:
    ```
    pip install -r requirements.txt
    ```
-3. Set up enviromental variables in .env files
+4. Set up enviromental variables in .env files
    ```
    CLIENT_ID=<your-spotify-client-id>
    CLIENT_SECRET=<your-spotify-client-secret>
-   SESSION_SECRET=<a-random-secret-key>
+   FLASK_SECRET_KEY=<a-random-secret-key>
    ```
-4. Run the application:
+5. Run the application:
    ```
    python3 music_rec_system.py
    ```

@@ -1,4 +1,5 @@
 import os
 
 # GENERATE SECRET KEY
-print(os.urandom(24))
+secret_key = os.urandom(24).hex()
+print(secret_key)
