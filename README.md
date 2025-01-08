@@ -33,8 +33,5 @@ A Flask app that uses Spotify's Web API to retrieve user data (top artists, genr
    python3 music_rec_system.py
    ```
 
-## Pictures
-
 ![Screenshot1](/Screenshot1.png)
-
 ![Screenshot2](/Screenshot2.png)
