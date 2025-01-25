@@ -3,8 +3,6 @@ Verify your Spotify at https://docs.google.com/forms/d/1RczCzGf9NKg6bcSy68FWf1kP
 
 ## Spotify Music Recommendations
 
-Run Locally:
-
 1. Clone into the repository with web URL:
    ```
    git clone https://github.com/daniel68045/Music-Rec.git
