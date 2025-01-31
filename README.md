@@ -1,5 +1,5 @@
 
-Verify your Spotify at https://docs.google.com/forms/d/1RczCzGf9NKg6bcSy68FWf1kPq-NUKQZfLnEnpwsyWQ0/edit
+Add your Spotify at https://docs.google.com/forms/d/1RczCzGf9NKg6bcSy68FWf1kPq-NUKQZfLnEnpwsyWQ0/edit
 
 ## Spotify Music Recommendations
 
